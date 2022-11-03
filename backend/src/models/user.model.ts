@@ -80,6 +80,12 @@ export class User extends Entity {
   })
   state: boolean;
 
+  @property ({
+    type: 'string',
+    required: true,
+  })
+  propertyId: string;
+
   @hasMany(() => Role)
   roles: Role[];
 
