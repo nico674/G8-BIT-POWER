@@ -1,16 +1,16 @@
 import {inject} from '@loopback/core';
 import {DefaultCrudRepository} from '@loopback/repository';
 import {MongodbDataSource} from '../datasources';
-import {User, UserRelations} from '../models';
+import {Section, SectionRelations} from '../models';
 
-export class UserRepository extends DefaultCrudRepository<
-  User,
-  typeof User.prototype.id,
-  UserRelations
+export class SectionRepository extends DefaultCrudRepository<
+  Section,
+  typeof Section.prototype.id,
+  SectionRelations
 > {
   constructor(
     @inject('datasources.mongodb') dataSource: MongodbDataSource,
   ) {
-    super(User, dataSource);
+    super(Section, dataSource);
   }
 }
