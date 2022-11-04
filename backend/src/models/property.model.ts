@@ -1,4 +1,9 @@
-import {Entity, model, property} from '@loopback/repository';
+import {belongsTo, Entity, hasMany, model, property, hasOne} from '@loopback/repository';
+import {Area} from './area.model';
+import {Management} from './management.model';
+import {Section} from './section.model';
+import {User} from './user.model';
+import {Invoice} from './invoice.model';
 
 @model()
 export class Property extends Entity {
@@ -33,6 +38,20 @@ export class Property extends Entity {
   })
   area: number;
 
+  @belongsTo(() => Management)
+  managementId: string;
+
+  @hasMany(() => User)
+  users: User[];
+
+  @belongsTo(() => Section)
+  sectionId: string;
+
+  @hasMany(() => Area)
+  areas: Area[];
+
+  @hasOne(() => Invoice)
+  invoice: Invoice;
 
   constructor(data?: Partial<Property>) {
     super(data);
