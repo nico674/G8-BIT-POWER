@@ -26,26 +26,26 @@ export class InvoicePaymentController {
     @repository(InvoiceRepository) protected invoiceRepository: InvoiceRepository,
   ) { }
 
-  @get('/invoices/{id}/payments', {
+  @get('/invoices/{id}/payment', {
     responses: {
       '200': {
-        description: 'Array of Invoice has many Payment',
+        description: 'Invoice has one Payment',
         content: {
           'application/json': {
-            schema: {type: 'array', items: getModelSchemaRef(Payment)},
+            schema: getModelSchemaRef(Payment),
           },
         },
       },
     },
   })
-  async find(
+  async get(
     @param.path.string('id') id: string,
     @param.query.object('filter') filter?: Filter<Payment>,
-  ): Promise<Payment[]> {
-    return this.invoiceRepository.payments(id).find(filter);
+  ): Promise<Payment> {
+    return this.invoiceRepository.payment(id).get(filter);
   }
 
-  @post('/invoices/{id}/payments', {
+  @post('/invoices/{id}/payment', {
     responses: {
       '200': {
         description: 'Invoice model instance',
@@ -67,10 +67,10 @@ export class InvoicePaymentController {
       },
     }) payment: Omit<Payment, 'id'>,
   ): Promise<Payment> {
-    return this.invoiceRepository.payments(id).create(payment);
+    return this.invoiceRepository.payment(id).create(payment);
   }
 
-  @patch('/invoices/{id}/payments', {
+  @patch('/invoices/{id}/payment', {
     responses: {
       '200': {
         description: 'Invoice.Payment PATCH success count',
@@ -90,10 +90,10 @@ export class InvoicePaymentController {
     payment: Partial<Payment>,
     @param.query.object('where', getWhereSchemaFor(Payment)) where?: Where<Payment>,
   ): Promise<Count> {
-    return this.invoiceRepository.payments(id).patch(payment, where);
+    return this.invoiceRepository.payment(id).patch(payment, where);
   }
 
-  @del('/invoices/{id}/payments', {
+  @del('/invoices/{id}/payment', {
     responses: {
       '200': {
         description: 'Invoice.Payment DELETE success count',
@@ -105,6 +105,6 @@ export class InvoicePaymentController {
     @param.path.string('id') id: string,
     @param.query.object('where', getWhereSchemaFor(Payment)) where?: Where<Payment>,
   ): Promise<Count> {
-    return this.invoiceRepository.payments(id).delete(where);
+    return this.invoiceRepository.payment(id).delete(where);
   }
 }

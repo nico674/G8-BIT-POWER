@@ -1,5 +1,5 @@
-import {belongsTo, Entity, hasMany, model, property} from '@loopback/repository';
-import {Management} from './management.model';
+import {Entity, model, property, belongsTo, hasOne} from '@loopback/repository';
+import {Property} from './property.model';
 import {Payment} from './payment.model';
 
 @model()
@@ -23,16 +23,17 @@ export class Invoice extends Entity {
   })
   dateTime: string;
 
-  @belongsTo(() => Management)
-  managementId: string;
-
   @property({
     type: 'string',
+    required: true,
   })
-  propertyId?: string;
+  managementId: string;
 
-  @hasMany(() => Payment)
-  paymentId: Payment[];
+  @belongsTo(() => Property)
+  propertyId: string;
+
+  @hasOne(() => Payment)
+  payment: Payment;
 
   constructor(data?: Partial<Invoice>) {
     super(data);
