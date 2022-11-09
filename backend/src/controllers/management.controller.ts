@@ -37,12 +37,12 @@ export class ManagementController {
         'application/json': {
           schema: getModelSchemaRef(Management, {
             title: 'NewManagement',
-            exclude: ['y'],
+            exclude: ['id'],
           }),
         },
       },
     })
-    management: Omit<Management, 'y'>,
+    management: Omit<Management, 'id'>,
   ): Promise<Management> {
     return this.managementRepository.create(management);
   }

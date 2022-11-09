@@ -1,8 +1,8 @@
 import {inject, Getter} from '@loopback/core';
-import {DefaultCrudRepository, repository, BelongsToAccessor, HasManyRepositoryFactory} from '@loopback/repository';
+import {DefaultCrudRepository, repository, BelongsToAccessor, HasOneRepositoryFactory} from '@loopback/repository';
 import {MongodbDataSource} from '../datasources';
-import {Invoice, InvoiceRelations, Management, Payment} from '../models';
-import {ManagementRepository} from './management.repository';
+import {Invoice, InvoiceRelations, Property, Payment} from '../models';
+import {PropertyRepository} from './property.repository';
 import {PaymentRepository} from './payment.repository';
 
 export class InvoiceRepository extends DefaultCrudRepository<
@@ -11,17 +11,17 @@ export class InvoiceRepository extends DefaultCrudRepository<
   InvoiceRelations
 > {
 
-  public readonly management: BelongsToAccessor<Management, typeof Invoice.prototype.id>;
+  public readonly property: BelongsToAccessor<Property, typeof Invoice.prototype.id>;
 
-  public readonly payments: HasManyRepositoryFactory<Payment, typeof Invoice.prototype.id>;
+  public readonly payment: HasOneRepositoryFactory<Payment, typeof Invoice.prototype.id>;
 
   constructor(
-    @inject('datasources.mongodb') dataSource: MongodbDataSource, @repository.getter('ManagementRepository') protected managementRepositoryGetter: Getter<ManagementRepository>, @repository.getter('PaymentRepository') protected paymentRepositoryGetter: Getter<PaymentRepository>,
+    @inject('datasources.mongodb') dataSource: MongodbDataSource, @repository.getter('PropertyRepository') protected propertyRepositoryGetter: Getter<PropertyRepository>, @repository.getter('PaymentRepository') protected paymentRepositoryGetter: Getter<PaymentRepository>,
   ) {
     super(Invoice, dataSource);
-    this.payments = this.createHasManyRepositoryFactoryFor('payments', paymentRepositoryGetter,);
-    this.registerInclusionResolver('payments', this.payments.inclusionResolver);
-    this.management = this.createBelongsToAccessorFor('management', managementRepositoryGetter,);
-    this.registerInclusionResolver('management', this.management.inclusionResolver);
+    this.payment = this.createHasOneRepositoryFactoryFor('payment', paymentRepositoryGetter);
+    this.registerInclusionResolver('payment', this.payment.inclusionResolver);
+    this.property = this.createBelongsToAccessorFor('property', propertyRepositoryGetter,);
+    this.registerInclusionResolver('property', this.property.inclusionResolver);
   }
 }
