@@ -12,3 +12,4 @@ export * from './invoice.controller';
 export * from './payment.controller';
 export * from './section.controller';
 export * from './property.controller';
+export * from './payment-invoice.controller';
