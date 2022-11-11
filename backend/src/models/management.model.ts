@@ -1,6 +1,5 @@
-import {Entity, hasMany, model, property} from '@loopback/repository';
-import {Invoice} from './invoice.model';
-import {Property} from './property.model';
+import {Entity, model, property, hasMany} from '@loopback/repository';
+import {Section} from './section.model';
 
 @model()
 export class Management extends Entity {
@@ -65,11 +64,8 @@ export class Management extends Entity {
   })
   userId: string;
 
-  @hasMany(() => Property)
-  properties: Property[];
-
-  @hasMany(() => Invoice)
-  invoices: Invoice[];
+  @hasMany(() => Section)
+  sections: Section[];
 
   constructor(data?: Partial<Management>) {
     super(data);

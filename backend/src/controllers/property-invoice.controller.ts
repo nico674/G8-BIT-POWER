@@ -26,26 +26,26 @@ export class PropertyInvoiceController {
     @repository(PropertyRepository) protected propertyRepository: PropertyRepository,
   ) { }
 
-  @get('/properties/{id}/invoice', {
+  @get('/properties/{id}/invoices', {
     responses: {
       '200': {
-        description: 'Property has one Invoice',
+        description: 'Array of Property has many Invoice',
         content: {
           'application/json': {
-            schema: getModelSchemaRef(Invoice),
+            schema: {type: 'array', items: getModelSchemaRef(Invoice)},
           },
         },
       },
     },
   })
-  async get(
+  async find(
     @param.path.string('id') id: string,
     @param.query.object('filter') filter?: Filter<Invoice>,
-  ): Promise<Invoice> {
-    return this.propertyRepository.invoice(id).get(filter);
+  ): Promise<Invoice[]> {
+    return this.propertyRepository.invoices(id).find(filter);
   }
 
-  @post('/properties/{id}/invoice', {
+  @post('/properties/{id}/invoices', {
     responses: {
       '200': {
         description: 'Property model instance',
@@ -67,10 +67,10 @@ export class PropertyInvoiceController {
       },
     }) invoice: Omit<Invoice, 'id'>,
   ): Promise<Invoice> {
-    return this.propertyRepository.invoice(id).create(invoice);
+    return this.propertyRepository.invoices(id).create(invoice);
   }
 
-  @patch('/properties/{id}/invoice', {
+  @patch('/properties/{id}/invoices', {
     responses: {
       '200': {
         description: 'Property.Invoice PATCH success count',
@@ -90,10 +90,10 @@ export class PropertyInvoiceController {
     invoice: Partial<Invoice>,
     @param.query.object('where', getWhereSchemaFor(Invoice)) where?: Where<Invoice>,
   ): Promise<Count> {
-    return this.propertyRepository.invoice(id).patch(invoice, where);
+    return this.propertyRepository.invoices(id).patch(invoice, where);
   }
 
-  @del('/properties/{id}/invoice', {
+  @del('/properties/{id}/invoices', {
     responses: {
       '200': {
         description: 'Property.Invoice DELETE success count',
@@ -105,6 +105,6 @@ export class PropertyInvoiceController {
     @param.path.string('id') id: string,
     @param.query.object('where', getWhereSchemaFor(Invoice)) where?: Where<Invoice>,
   ): Promise<Count> {
-    return this.propertyRepository.invoice(id).delete(where);
+    return this.propertyRepository.invoices(id).delete(where);
   }
 }
