@@ -1,3 +1,5 @@
+// PART 1 - SERVICES INTEGRATION - REG
+import {service} from '@loopback/core/dist/service';
 import {
   Count,
   CountSchema,
@@ -19,11 +21,18 @@ import {
 } from '@loopback/rest';
 import {User} from '../models';
 import {UserRepository} from '../repositories';
+// PART 1 - SERVICES INTEGRATION - REG
+import {AuthenticationService} from '../services';
+const fetch = require('node-fetch');
+
 
 export class UserController {
   constructor(
     @repository(UserRepository)
     public userRepository : UserRepository,
+    // PART 1 - SERVICES INTEGRATION - REG
+    @service(AuthenticationService)
+    public servicioAutenticacion : AuthenticationService
   ) {}
 
   @post('/users')
@@ -44,7 +53,26 @@ export class UserController {
     })
     user: Omit<User, 'id'>,
   ): Promise<User> {
-    return this.userRepository.create(user);
+      // BEGIN PART 1 - SERVICES INTEGRATION - REG
+      let clave = this.servicioAutenticacion.GenerarClave();
+      let claveCifrada = this.servicioAutenticacion.CifrarClave(clave);
+
+      user.password = claveCifrada;
+
+      let u = await this.userRepository.create(user);
+
+      // Notificar al usuario
+      let destino = user.email;
+      let asunto = 'Registro en la plataforma';
+      let contenido = `Hola ${user.firstName} su nombre de usuario es: ${user.email} y su contraseña es: ${clave}.`;
+
+      fetch(`http://localhost:5000/gmail?destino=${destino}&asunto=${asunto}&contenido=${contenido}`)
+      .then((data:any)  => {
+        console.log(data);
+      });
+
+      return u;
+      // END PART 1 - SERVICES INTEGRATION - REG
   }
 
   @get('/users/count')

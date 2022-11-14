@@ -11,10 +11,10 @@ export class Payment extends Entity {
   id?: string;
 
   @property({
-    type: 'number',
+    type: 'string',
     required: true,
   })
-  voucher: number;
+  voucher: string;
 
   @property({
     type: 'number',
@@ -23,16 +23,16 @@ export class Payment extends Entity {
   value: number;
 
   @property({
-    type: 'boolean',
-    required: true,
-  })
-  partial: boolean;
-
-  @property({
-    type: 'string',
+    type: 'date',
     required: true,
   })
   dateTime: string;
+
+  // @property({
+  //   type: 'string',
+  //   required: true,
+  // })
+  // invoiceId: string;
 
   @belongsTo(() => Invoice)
   invoiceId: string;

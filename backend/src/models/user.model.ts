@@ -1,4 +1,6 @@
-import {Entity, model, property} from '@loopback/repository';
+import {Entity, model, property, hasMany} from '@loopback/repository';
+import {Role} from './role.model';
+
 
 @model()
 export class User extends Entity {
@@ -17,9 +19,8 @@ export class User extends Entity {
 
   @property({
     type: 'string',
-    required: true,
   })
-  secondName: string;
+  secondName?: string;
 
   @property({
     type: 'string',
@@ -29,9 +30,8 @@ export class User extends Entity {
 
   @property({
     type: 'string',
-    required: true,
   })
-  secondSurname: string;
+  secondSurname?: string;
 
   @property({
     type: 'string',
@@ -47,9 +47,8 @@ export class User extends Entity {
 
   @property({
     type: 'boolean',
-    required: true,
   })
-  sex: boolean;
+  sex?: boolean;
 
   @property({
     type: 'string',
@@ -67,7 +66,7 @@ export class User extends Entity {
     type: 'string',
     required: true,
   })
-  userName: string;
+  username: string;
 
   @property({
     type: 'string',
@@ -81,12 +80,14 @@ export class User extends Entity {
   })
   state: boolean;
 
-  @property({
-    type: 'string',
-    required: true,
-  })
-  propertyId: string;
+  // @property({
+  //   type: 'string',
+  //   required: true,
+  // })
+  // propertyId: string;
 
+  @hasMany(() => Role)
+  roles: Role[];
 
   constructor(data?: Partial<User>) {
     super(data);
