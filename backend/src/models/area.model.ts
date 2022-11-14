@@ -1,5 +1,12 @@
 import {belongsTo, Entity, model, property} from '@loopback/repository';
+import {AreaTypes} from './AreaTypes.enum';
 import {Property} from './property.model';
+
+// enum AreaTypes {
+//   PARKING_LOT = 'parkingLot',
+//   UTILITY_ROOM = 'utilityRoom'
+// }
+
 
 @model()
 export class Area extends Entity {
@@ -10,11 +17,26 @@ export class Area extends Entity {
   })
   id?: string;
 
+  // @property({
+  //   type: 'string',
+  //   required: true,
+  // })
+  // areaType: string;
+
   @property({
     type: 'string',
     required: true,
+    jsonSchema: {
+      enum: Object.values(AreaTypes),
+    },
   })
-  type: string;
+  areaType: AreaTypes;
+
+  // @property({
+  //   type: 'string',
+  //   required: true,
+  // })
+  // propertyId: string;
 
   @belongsTo(() => Property)
   propertyId: string;

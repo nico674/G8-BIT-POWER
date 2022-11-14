@@ -1,6 +1,15 @@
-import {Entity, model, property, belongsTo, hasMany} from '@loopback/repository';
-import {Section} from './section.model';
+import {belongsTo, Entity, hasMany, model, property} from '@loopback/repository';
 import {Invoice} from './invoice.model';
+import {PropertyTypes} from './PropertyTypes.enum';
+import {Section} from './section.model';
+
+
+// enum PropertyTypes {
+//   apartment,
+//   studioApartment,
+//   Local
+// }
+
 
 @model()
 export class Property extends Entity {
@@ -11,17 +20,20 @@ export class Property extends Entity {
   })
   id?: string;
 
-  @property({
-    type: 'string',
-    required: true,
-  })
-  owner: string;
+  // @property({
+  //   type: 'string',
+  //   required: true,
+  // })
+  // type: string;
 
   @property({
     type: 'string',
     required: true,
+    jsonSchema: {
+      enum: Object.values(PropertyTypes),
+    },
   })
-  type: string;
+  type: PropertyTypes;
 
   @property({
     type: 'number',
@@ -33,13 +45,25 @@ export class Property extends Entity {
     type: 'number',
     required: true,
   })
-  area: number;
+  spaceArea: number;
+
+  // @property({
+  //   type: 'string',
+  //   required: true,
+  // })
+  // managementId: string;
 
   @property({
     type: 'string',
     required: true,
   })
-  managementId: string;
+  ownerId: string;
+
+  // @property({
+  //   type: 'string',
+  //   required: true,
+  // })
+  // sectionId: string;
 
   @belongsTo(() => Section)
   sectionId: string;
